@@ -18,10 +18,10 @@ namespace wServer.realm
 {
     public struct RealmTime
     {
-        public long TickCount;
-        public long TotalElapsedMs;
-        public int TickDelta;
-        public int ElaspedMsDelta;
+        public long TickCount; // 已经过的总真实 tick 数, 如果此时是第一帧, TickCount 的值 为 0.
+        public long TotalElapsedMs; // 当前逻辑帧开始时已经过的总时间戳(距离游戏开始时)
+        public int TickDelta; // 当前逻辑帧需要执行的真实 tick 数量, 当 LAG 累积到2个tick 时间时, 会在一个逻辑帧里执行2次 tick
+        public int ElaspedMsDelta; // = TickDelta * 每帧标准耗时(如: 33ms)
     }
 
     public enum PendingPriority
