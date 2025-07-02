@@ -61,6 +61,12 @@ namespace wServer.realm
                 var logicTime = (int)(watch.ElapsedMilliseconds - t.TotalElapsedMs);
                 _mre.WaitOne(Math.Max(0, MsPT - logicTime));
                 loopTime += (int)(watch.ElapsedMilliseconds - t.TotalElapsedMs) - t.ElaspedMsDelta;
+
+                // 正常情况下 looptime 都是等于 1 个 tick 的时刻, 如: 33
+                // 如果一次 tick 超时了 10ms ,looptime 就会 +10, lag 的这 10ms 会一直累加，直到累加到 66,
+                // 会出现在一个 tick 里执行 2 次逻辑, 就是 TickDelta 为 2, 这时候, looptime 会减少 33, 再次回到 33
+                // 总结: 累积的 LAG 会在将来某个 tick 里通过一次执行 2 次 逻辑来进行追赶
+
             } while (true);
             Log.Info("Logic loop stopped.");
         }
